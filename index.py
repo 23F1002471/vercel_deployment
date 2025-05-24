@@ -21,4 +21,4 @@ with open("marks.json", "r") as f:
 async def get_marks(request: Request):
     names = request.query_params.getlist("name")
     result = [marks_data.get(name, None) for name in names]
-    return JSONResponse(content={"marks": result})
+    return {"marks": result}
