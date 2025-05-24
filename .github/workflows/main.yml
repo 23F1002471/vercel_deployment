@@ -1,0 +1,23 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: ✅ Dummy Step by 23f1002471@ds.study.iitm.ac.in
+        run: echo "This step includes the email in its name"
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: 🚀 Deploy to Vercel
+        run: vercel --prod --confirm --token ${{ secrets.VERCEL_TOKEN }}
