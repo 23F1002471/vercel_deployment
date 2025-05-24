@@ -1,25 +1,25 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 import json
-import os
 
 app = FastAPI()
 
+# Load marks.json once (adjust path if needed)
+with open('marks.json') as f:
+    marks_list = json.load(f)
+
+# Convert list of dicts to dict: {name: marks}
+marks_data = {entry['name']: entry['marks'] for entry in marks_list}
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
+    allow_origins=["*"],  # Allow all origins for CORS
+    allow_methods=["GET"],
     allow_headers=["*"],
 )
 
-# Load marks.json safely
-here = os.path.dirname(__file__)
-with open(os.path.join(here, "marks.json"), "r") as f:
-    marks_data = json.load(f)
-
 @app.get("/api")
 async def get_marks(request: Request):
-    names = request.query_params.getlist("name")
-    result = [marks_data.get(name, None) for name in names]
-    return JSONResponse(content={"marks": result})
+    names = request.query_params.getlist("name")  # Get all ?name= params
+    result = [marks_data.get(name, None) for name in names]  # Lookup marks or None
+    return {"marks": result}
