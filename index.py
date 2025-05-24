@@ -5,7 +5,6 @@ import json
 
 app = FastAPI()
 
-# Enable CORS for all origins
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -13,7 +12,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load marks from JSON
 with open("marks.json", "r") as f:
     marks_data = json.load(f)
 
@@ -21,4 +19,4 @@ with open("marks.json", "r") as f:
 async def get_marks(request: Request):
     names = request.query_params.getlist("name")
     result = [marks_data.get(name, None) for name in names]
-    return {"marks": result}
+    return JSONResponse(content={"marks": result})
