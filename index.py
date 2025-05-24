@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 import json
+import os
 
 app = FastAPI()
 
@@ -12,7 +13,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-with open("marks.json", "r") as f:
+# Load marks.json safely
+here = os.path.dirname(__file__)
+with open(os.path.join(here, "marks.json"), "r") as f:
     marks_data = json.load(f)
 
 @app.get("/api")
